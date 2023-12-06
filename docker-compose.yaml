@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  desafio-mariadb:
+    driver: bridge
+
+volumes:
+  desafio-mariadb:
+
+services:
+  mariadb:
+    image: mariadb:latest
+    volumes:
+      - desafio-mariadb:/var/lib/mysql:Z
+    environment:
+      MARIADB_ROOT_PASSWORD: mariadbpass
+    networks:
+      - desafio-mariadb
+
+  phpmyadmin:
+    image: pestana1984/phpmyadmin:latest
+    build:
+      context: ./phpmyadmin
+      dockerfile: ./Dockerfile
+    ports:
+      - 8080:80
+    depends_on: 
+    - mariadb
